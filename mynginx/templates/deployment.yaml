@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels: {{ include "common.labels" . | nindent 4}}
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: {{ .Release.Name }}
+      labels: {{ include "common.labels" . | nindent 10 }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.port }}
+      restartPolicy: Always
+  selector:
+    matchLabels: {{ include "common.labels" . | nindent 8 }}
